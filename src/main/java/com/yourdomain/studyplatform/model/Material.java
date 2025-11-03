@@ -1,7 +1,6 @@
 package com.yourdomain.studyplatform.model;
 
 import java.time.LocalDate;
-// Note: You must also create the User.java POJO with ID, username, and password fields.
 
 public class Material {
     private int id;
@@ -11,35 +10,31 @@ public class Material {
     private String description;
     private String fileLink;
     private LocalDate uploadDate;
+    
+    // Constructors (as provided before)
+    // ...
 
-    // Default Constructor
-    public Material() {}
-
-    // Constructor for creating new materials
-    public Material(int userId, String title, String subject, String description, String fileLink) {
-        this.userId = userId;
-        this.title = title;
-        this.subject = subject;
-        this.description = description;
-        this.fileLink = fileLink;
-        this.uploadDate = LocalDate.now();
-    }
-
-    // Constructor for fetching existing materials
-    public Material(int id, int userId, String title, String subject, String description, String fileLink, LocalDate uploadDate) {
-        this.id = id;
-        this.userId = userId;
-        this.title = title;
-        this.subject = subject;
-        this.description = description;
-        this.fileLink = fileLink;
-        this.uploadDate = uploadDate;
-    }
-
-    // --- Getters and Setters (omitted for brevity, but include all) ---
+    // --- MUST HAVE: ALL Getters and Setters to resolve compilation errors ---
+    
     public int getId() { return id; }
-    // ...
+    public void setId(int id) { this.id = id; }
+    
+    // *** THESE ARE THE MISSING METHODS CAUSING THE ERROR ***
+    public int getUserId() { return userId; }
+    public void setUserId(int userId) { this.userId = userId; }
+    
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+    
+    public String getSubject() { return subject; }
+    public void setSubject(String subject) { this.subject = subject; }
+    
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+    
     public String getFileLink() { return fileLink; }
+    public void setFileLink(String fileLink) { this.fileLink = fileLink; }
+    
     public LocalDate getUploadDate() { return uploadDate; }
-    // ...
+    public void setUploadDate(LocalDate uploadDate) { this.uploadDate = uploadDate; }
 }
