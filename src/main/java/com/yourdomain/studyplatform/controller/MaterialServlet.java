@@ -2,9 +2,15 @@ package com.yourdomain.studyplatform.controller;
 
 import com.yourdomain.studyplatform.dao.MaterialDAO;
 import com.yourdomain.studyplatform.model.Material;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+// ------------------------------------------------------------------
+// CRITICAL FIX: Changed javax.servlet imports to JAKARTA.servlet
+// ------------------------------------------------------------------
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession; // Retained, though AuthFilter handles most session logic
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -17,19 +23,15 @@ public class MaterialServlet extends HttpServlet {
         materialDAO = new MaterialDAO();
     }
     
-    // Simple filter to ensure user is logged in
-    private boolean isAuthenticated(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("userId") == null) {
-            response.sendRedirect("login"); // Redirect to LoginServlet
-            return false;
-        }
-        return true;
-    }
+    // ------------------------------------------------------------------
+    // REMOVED: isAuthenticated() method. 
+    // The AuthFilter.java handles this globally for cleaner Servlets.
+    // ------------------------------------------------------------------
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        if (!isAuthenticated(request, response)) return;
+        
+        // ** NO AUTH CHECK HERE ** (AuthFilter ensures only logged-in users reach this point)
 
         String action = request.getServletPath();
         try {
@@ -52,9 +54,8 @@ public class MaterialServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        if (!isAuthenticated(request, response)) return;
         
-        String action = request.getServletPath();
+        // ** NO AUTH CHECK HERE ** String action = request.getServletPath();
         try {
             if (action.equals("/insert")) {
                 insertMaterial(request, response);
@@ -71,12 +72,17 @@ public class MaterialServlet extends HttpServlet {
         // Retrieve ALL materials (public sharing)
         request.setAttribute("listMaterials", materialDAO.selectAllMaterials());
         // Also pass the logged-in user's ID for the delete button check in the JSP
-        request.setAttribute("currentUserId", request.getSession().getAttribute("userId")); 
+        // Use request.getSession(false) since the AuthFilter guarantees a session exists here
+        HttpSession session = request.getSession(false); 
+        if (session != null) {
+            request.setAttribute("currentUserId", session.getAttribute("userId")); 
+        }
         request.getRequestDispatcher("material-list.jsp").forward(request, response);
     }
     
     private void insertMaterial(HttpServletRequest request, HttpServletResponse response) 
             throws SQLException, IOException {
+        // Session should be guaranteed by AuthFilter
         int userId = (int) request.getSession().getAttribute("userId");
         
         String title = request.getParameter("title");
@@ -92,7 +98,9 @@ public class MaterialServlet extends HttpServlet {
     private void deleteMaterial(HttpServletRequest request, HttpServletResponse response) 
             throws SQLException, IOException {
         int materialId = Integer.parseInt(request.getParameter("id"));
-        int userId = (int) request.getSession().getAttribute("userId");
+        
+        // Session should be guaranteed by AuthFilter
+        int userId = (int) request.getSession().getAttribute("userId"); 
         
         // DAO handles the security check (materialId AND userId)
         materialDAO.deleteMaterial(materialId, userId); 
