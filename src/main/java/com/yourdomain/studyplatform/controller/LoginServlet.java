@@ -2,9 +2,15 @@ package com.yourdomain.studyplatform.controller;
 
 import com.yourdomain.studyplatform.dao.UserDAO;
 import com.yourdomain.studyplatform.model.User;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+// ------------------------------------------------------------------
+// CRITICAL FIX: Changed javax.servlet imports to JAKARTA.servlet
+// ------------------------------------------------------------------
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet("/login")
