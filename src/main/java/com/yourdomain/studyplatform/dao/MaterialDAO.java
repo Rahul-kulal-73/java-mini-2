@@ -16,6 +16,7 @@ public class MaterialDAO {
 
     // --- 1. CREATE ---
     public void insertMaterial(Material material) throws SQLException {
+        // No change needed: Connection is inside try-with-resources.
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_MATERIAL_SQL)) {
             preparedStatement.setInt(1, material.getUserId());
@@ -28,8 +29,9 @@ public class MaterialDAO {
     }
 
     // --- 2. READ (All) ---
-    public List<Material> selectAllMaterials() {
+    public List<Material> selectAllMaterials() throws SQLException { // <-- ADDED: Throws SQLException
         List<Material> materials = new ArrayList<>();
+        // No change needed: Connection is inside try-with-resources.
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_MATERIALS);
              ResultSet rs = preparedStatement.executeQuery()) {
@@ -41,12 +43,15 @@ public class MaterialDAO {
                 String subject = rs.getString("subject");
                 String description = rs.getString("description");
                 String fileLink = rs.getString("file_link");
-                LocalDate uploadDate = rs.getDate("upload_date").toLocalDate();
+                // CRITICAL: Ensure the LocalDate object creation is safe
+                Date uploadSqlDate = rs.getDate("upload_date");
+                LocalDate uploadDate = (uploadSqlDate != null) ? uploadSqlDate.toLocalDate() : null;
                 
                 materials.add(new Material(id, userId, title, subject, description, fileLink, uploadDate));
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            throw e; // <-- CRITICAL CHANGE: Re-throw the SQL Exception to be handled upstream
         }
         return materials;
     }
@@ -54,6 +59,7 @@ public class MaterialDAO {
     // --- 3. DELETE (Securely by Material ID AND User ID) ---
     public boolean deleteMaterial(int materialId, int userId) throws SQLException {
         boolean rowDeleted;
+        // No change needed: Connection is inside try-with-resources.
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(DELETE_MATERIAL_SQL)) {
             statement.setInt(1, materialId);
