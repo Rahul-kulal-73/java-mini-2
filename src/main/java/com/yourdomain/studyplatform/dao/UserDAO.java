@@ -34,7 +34,8 @@ public class UserDAO {
     }
 
     // --- 2. Login Validation ---
-    public User validateUser(String username, String password) {
+    // CRITICAL CHANGE: Throws SQLException to be handled by the calling Servlet
+    public User validateUser(String username, String password) throws SQLException { 
         User user = null;
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_USERNAME)) {
@@ -59,6 +60,7 @@ public class UserDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            throw e; // Re-throw the SQLException for the Servlet to catch
         }
         return user;
     }
