@@ -6,8 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-// Map this servlet to the application root (/). This is the guaranteed entry point.
-@WebServlet("/")
+@WebServlet("/") // Guaranteed entry point
 public class HomeServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
