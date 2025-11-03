@@ -10,16 +10,38 @@ public class Material {
     private String description;
     private String fileLink;
     private LocalDate uploadDate;
-    
-    // Constructors (as provided before)
-    // ...
 
-    // --- MUST HAVE: ALL Getters and Setters to resolve compilation errors ---
-    
+    // --- 1. DEFAULT CONSTRUCTOR (REQUIRED by Servlets/JSPs) ---
+    public Material() {}
+
+    // --- 2. CREATION CONSTRUCTOR (Used by MaterialServlet for INSERT) ---
+    // Matches: int, String, String, String, String
+    public Material(int userId, String title, String subject, String description, String fileLink) {
+        this.userId = userId;
+        this.title = title;
+        this.subject = subject;
+        this.description = description;
+        this.fileLink = fileLink;
+        this.uploadDate = LocalDate.now();
+    }
+
+    // --- 3. RETRIEVAL CONSTRUCTOR (Used by MaterialDAO for SELECT) ---
+    // Matches: int, int, String, String, String, String, LocalDate
+    public Material(int id, int userId, String title, String subject, String description, String fileLink, LocalDate uploadDate) {
+        this.id = id;
+        this.userId = userId;
+        this.title = title;
+        this.subject = subject;
+        this.description = description;
+        this.fileLink = fileLink;
+        this.uploadDate = uploadDate;
+    }
+
+    // --- GETTERS and SETTERS (Resolves the 'cannot find symbol' errors) ---
+
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     
-    // *** THESE ARE THE MISSING METHODS CAUSING THE ERROR ***
     public int getUserId() { return userId; }
     public void setUserId(int userId) { this.userId = userId; }
     
