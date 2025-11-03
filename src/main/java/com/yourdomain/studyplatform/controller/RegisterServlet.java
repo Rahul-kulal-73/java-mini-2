@@ -2,16 +2,13 @@ package com.yourdomain.studyplatform.controller;
 
 import com.yourdomain.studyplatform.dao.UserDAO;
 import com.yourdomain.studyplatform.model.User;
-// CRITICAL FIX: All imports use 'jakarta'
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet("/register")
+// NOTE: @WebServlet("/register") annotation has been REMOVED
 public class RegisterServlet extends HttpServlet {
     private UserDAO userDAO;
 
@@ -19,13 +16,13 @@ public class RegisterServlet extends HttpServlet {
         userDAO = new UserDAO();
     }
 
-    @Override // Now correctly overrides HttpServlet.doGet(jakarta.servlet...)
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         request.getRequestDispatcher("register.jsp").forward(request, response);
     }
 
-    @Override // Now correctly overrides HttpServlet.doPost(jakarta.servlet...)
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         String username = request.getParameter("username");
