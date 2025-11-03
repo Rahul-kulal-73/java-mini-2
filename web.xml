@@ -8,12 +8,5 @@
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
-    
-    <jsp-config>
-        <taglib>
-            <taglib-uri>/WEB-INF/tlds/c.tld</taglib-uri>
-            <taglib-location>/WEB-INF/lib/jstl-1.2.jar</taglib-location>
-        </taglib>
-    </jsp-config>
 
 </web-app>
