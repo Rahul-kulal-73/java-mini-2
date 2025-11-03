@@ -1,9 +1,9 @@
 package com.yourdomain.studyplatform.controller;
 
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 // Map this servlet to the application root (/). This is the guaranteed entry point.
@@ -11,6 +11,7 @@ import java.io.IOException;
 public class HomeServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws IOException {
         
