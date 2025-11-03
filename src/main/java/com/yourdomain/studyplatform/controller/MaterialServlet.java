@@ -2,9 +2,7 @@ package com.yourdomain.studyplatform.controller;
 
 import com.yourdomain.studyplatform.dao.MaterialDAO;
 import com.yourdomain.studyplatform.model.Material;
-// CRITICAL FIX: All imports use 'jakarta'
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,22 +10,18 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 
-// Maps all material-related actions
-@WebServlet({"/list", "/new", "/insert", "/delete"}) 
+// NOTE: @WebServlet(...) annotation has been REMOVED
 public class MaterialServlet extends HttpServlet {
     private MaterialDAO materialDAO;
 
     public void init() {
         materialDAO = new MaterialDAO();
     }
-    
-    // Note: Inline isAuthenticated method removed, relying on AuthFilter
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
-        // No authentication check here (AuthFilter handles it)
-
+        // Auth is handled by AuthFilter
         String action = request.getServletPath();
         try {
             switch (action) {
@@ -50,9 +44,8 @@ public class MaterialServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
-        // CRITICAL FIX: Define 'action' locally to fix the compilation error
+        // Auth is handled by AuthFilter
         String action = request.getServletPath(); 
-
         try {
             if (action.equals("/insert")) {
                 insertMaterial(request, response);
@@ -66,7 +59,7 @@ public class MaterialServlet extends HttpServlet {
 
     private void listMaterials(HttpServletRequest request, HttpServletResponse response) 
             throws SQLException, IOException, ServletException {
-        // ... (body remains the same) ...
+        
         request.setAttribute("listMaterials", materialDAO.selectAllMaterials());
         HttpSession session = request.getSession(false); 
         if (session != null) {
@@ -77,7 +70,7 @@ public class MaterialServlet extends HttpServlet {
     
     private void insertMaterial(HttpServletRequest request, HttpServletResponse response) 
             throws SQLException, IOException {
-        // ... (body remains the same, assumes correct implementation of Material constructor) ...
+        
         int userId = (int) request.getSession().getAttribute("userId");
         String title = request.getParameter("title");
         String subject = request.getParameter("subject");
@@ -91,7 +84,7 @@ public class MaterialServlet extends HttpServlet {
     
     private void deleteMaterial(HttpServletRequest request, HttpServletResponse response) 
             throws SQLException, IOException {
-        // ... (body remains the same) ...
+        
         int materialId = Integer.parseInt(request.getParameter("id"));
         int userId = (int) request.getSession().getAttribute("userId"); 
         
