@@ -3,6 +3,7 @@ package com.yourdomain.studyplatform.controller;
 import com.yourdomain.studyplatform.dao.MaterialDAO;
 import com.yourdomain.studyplatform.model.Material;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet; // ANNOTATION IS BACK
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -10,7 +11,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 
-// NOTE: @WebServlet(...) annotation has been REMOVED
+@WebServlet({"/list", "/new", "/insert", "/delete"}) // ANNOTATION IS BACK
 public class MaterialServlet extends HttpServlet {
     private MaterialDAO materialDAO;
 
@@ -21,7 +22,6 @@ public class MaterialServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
-        // Auth is handled by AuthFilter
         String action = request.getServletPath();
         try {
             switch (action) {
@@ -44,7 +44,6 @@ public class MaterialServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
-        // Auth is handled by AuthFilter
         String action = request.getServletPath(); 
         try {
             if (action.equals("/insert")) {
