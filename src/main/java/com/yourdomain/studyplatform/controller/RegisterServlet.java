@@ -3,12 +3,13 @@ package com.yourdomain.studyplatform.controller;
 import com.yourdomain.studyplatform.dao.UserDAO;
 import com.yourdomain.studyplatform.model.User;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet; // ANNOTATION IS BACK
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-// NOTE: @WebServlet("/register") annotation has been REMOVED
+@WebServlet("/register") // ANNOTATION IS BACK
 public class RegisterServlet extends HttpServlet {
     private UserDAO userDAO;
 
@@ -38,13 +39,10 @@ public class RegisterServlet extends HttpServlet {
         try {
             User newUser = new User(username, password);
             boolean success = userDAO.registerUser(newUser);
-
             if (success) {
-                // Success: Redirect to login page
                 request.setAttribute("successMessage", "Registration successful! Please log in.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
             } else {
-                // Failure: Username already exists (handled in DAO)
                 request.setAttribute("errorMessage", "Username already taken. Please choose another.");
                 request.getRequestDispatcher("register.jsp").forward(request, response);
             }
